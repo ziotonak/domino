@@ -1,8 +1,9 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 typedef struct {
-    char f, s;
+    uint8_t f, s;
 } card_t;
 
 typedef struct {
@@ -10,14 +11,18 @@ typedef struct {
     card_t *array, *front, *rear;
 } deque_t;
 
-int deque_init(deque_t *deque, size_t capacity) {
+void die(const char *message) {
+    perror(message);
+    exit(1);
+}
+
+void deque_init(deque_t *deque, size_t capacity) {
     deque->length = 0;
     deque->capacity = capacity;
     deque->array = calloc(capacity, sizeof(card_t));
     if (deque->array == NULL)
-        return -1;
+        die("calloc");
     deque->front = deque ->rear = deque->array;
-    return 0;
 }
 
 void deque_free(deque_t *deque) {
@@ -57,24 +62,44 @@ void deque_push_rear(deque_t *deque, card_t value) {
     *deque->rear = value;
 }
 
-int main() {
+typedef struct {
+    uint64_t score;
     deque_t deque;
-    deque_init(&deque, 15);
+} game_t;
 
-    for (int i=0; i<200; ++i) {
-        card_t card = {i % 6, 6 - i % 6};
-        if (i & 1) deque_push_rear(&deque, card);
-        else deque_push_front(&deque, card);
-    }
+void game_init(game_t *game) {
+    game->score = 0;
+    deque_init(&game->deque, 5);
+}
 
-    if (deque.length) {
-        for (size_t i=0; i<deque.length; ++i) {
-            card_t card = *deque_at(&deque, i);
+void game_free(game_t *game) {
+    deque_free(&game->deque);
+}
+
+void game_push_front(game_t *game) {
+}
+
+void game_push_rear(game_t *game) {
+}
+
+void game_draw_screen(game_t *game) {
+    printf("\x1b[2J\x1b[H"); // clear screen and move cursor
+    if (game->deque.length) {
+        for (size_t i = 0; i < game->deque.length; ++i) {
+            card_t card = *deque_at(&game->deque, i);
             printf("[%d|%d] ", card.f, card.s);
         }
         putchar('\n');
     }
+}
 
-    deque_free(&deque);
+int main() {
+    game_t game;
+    game_init(&game);
+
+    while (1)
+        game_draw_screen(&game);
+
+    game_free(&game);
 }
 
