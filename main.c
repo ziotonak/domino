@@ -1,9 +1,13 @@
-#include <stdint.h>
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <time.h>
+
+/*** Deque ***/
 
 typedef struct {
-    uint8_t f, s;
+    unsigned f, s;
 } card_t;
 
 typedef struct {
@@ -62,43 +66,135 @@ void deque_push_rear(deque_t *deque, card_t value) {
     *deque->rear = value;
 }
 
+/*** Game ***/
+
 typedef struct {
-    uint64_t score;
+    bool running;
+    unsigned score;
+    unsigned round;
     deque_t deque;
+    unsigned count[6][6];
 } game_t;
 
-void game_init(game_t *game) {
+void game_init(game_t *game) { // TODO: accept N
+    game->running = true;
     game->score = 0;
-    deque_init(&game->deque, 5);
+    game->round = 1;
+    deque_init(&game->deque, 105); // TODO: pass N for capacity
+    for (int i = 0; i < 6; ++i)
+        for (int j = i; j < 6; ++j)
+            // TODO: generate a maximum of N cards
+            game->count[j][i] = game->count[i][j] = rand() % 2;
 }
 
 void game_free(game_t *game) {
     deque_free(&game->deque);
 }
 
-void game_push_front(game_t *game) {
+void game_update_flags(game_t *game) {
+    if (!game->deque.length)
+        return;
+    unsigned front = game->deque.front->f - 1;
+    for (int i = 0; i < 6; ++i)
+        if (game->count[front][i])
+            return;
+    unsigned rear = game->deque.rear->s - 1;
+    for (int i = 0; i < 6; ++i)
+        if (game->count[rear][i])
+            return;
+    game->running = false;
 }
 
-void game_push_rear(game_t *game) {
+void game_push_front(game_t *game, card_t card) {
+    unsigned i = card.f - 1, j = card.s - 1;
+    if (i < 0 || i >= 6 || j < 0 || j >= 6)
+        return;
+    if (game->count[i][j]) {
+        if (game->deque.length && card.s != game->deque.front->f)
+            return;
+        --game->count[i][j];
+        if (i != j)
+            --game->count[j][i];
+        game->score += card.f + card.s;
+        ++game->round;
+        deque_push_front(&game->deque, card);
+    }
+    game_update_flags(game);
 }
 
-void game_draw_screen(game_t *game) {
+void game_push_rear(game_t *game, card_t card) {
+    unsigned i = card.f - 1, j = card.s - 1;
+    if (i < 0 || i >= 6 || j < 0 || j >= 6)
+        return;
+    if (game->count[i][j]) {
+        if (game->deque.length && card.f != game->deque.rear->s)
+            return;
+        --game->count[i][j];
+        if (i != j)
+            --game->count[j][i];
+        game->score += card.f + card.s;
+        ++game->round;
+        deque_push_rear(&game->deque, card);
+    }
+    game_update_flags(game);
+}
+
+/*** Input ***/
+
+void handle_input(game_t *game) {
+    card_t card;
+    printf("Insert card: ");
+    scanf("%u", &card.f);
+    scanf("%u", &card.s);
+
+    printf("Push L/r: ");
+    char c = tolower(getchar());
+    while (c != 'l' && c != 'r')
+        c = tolower(getchar());
+
+    if (c == 'l')
+        game_push_front(game, card);
+    else
+        game_push_rear(game, card);
+}
+
+/*** Output ***/
+
+void draw_screen(game_t *game) {
     printf("\x1b[2J\x1b[H"); // clear screen and move cursor
+
+    printf("Score: %u\n", game->score); 
+    printf("Round: %u\n", game->round);
+
+    for (int i = 0; i < 6; ++i) {
+        for (int j = i; j < 6; ++j)
+            // TODO: highlight valid options
+            printf("%u [%d|%d]   ", game->count[i][j], i + 1, j + 1);
+        putchar('\n');
+    }
+
     if (game->deque.length) {
         for (size_t i = 0; i < game->deque.length; ++i) {
             card_t card = *deque_at(&game->deque, i);
-            printf("[%d|%d] ", card.f, card.s);
+            printf("[%u|%u] ", card.f, card.s);
         }
         putchar('\n');
     }
 }
 
+/*** Main ***/
+
 int main() {
+    srand((unsigned) time(NULL));
+
     game_t game;
     game_init(&game);
 
-    while (1)
-        game_draw_screen(&game);
+    while (game.running) {
+        draw_screen(&game);
+        handle_input(&game);
+    }
+    draw_screen(&game);
 
     game_free(&game);
 }
