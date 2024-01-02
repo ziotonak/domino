@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include <time.h>
 
 /*** Deque ***/
@@ -76,15 +77,16 @@ typedef struct {
     unsigned count[6][6];
 } game_t;
 
-void game_init(game_t *game) { // TODO: accept N
+void game_init(game_t *game, unsigned cards) {
     game->running = true;
     game->score = 0;
     game->round = 1;
-    deque_init(&game->deque, 105); // TODO: pass N for capacity
-    for (int i = 0; i < 6; ++i)
-        for (int j = i; j < 6; ++j)
-            // TODO: generate a maximum of N cards
-            game->count[j][i] = game->count[i][j] = rand() % 2;
+    deque_init(&game->deque, cards + 5);
+    memset(game->count, 0, sizeof(game->count));
+    while (cards--) {
+        int i = rand() % 6, j = rand() % 6;
+        game->count[j][i] = ++game->count[i][j];
+    }
 }
 
 void game_free(game_t *game) {
@@ -167,9 +169,16 @@ void draw_screen(game_t *game) {
     printf("Round: %u\n", game->round);
 
     for (int i = 0; i < 6; ++i) {
-        for (int j = i; j < 6; ++j)
-            // TODO: highlight valid options
-            printf("%u [%d|%d]   ", game->count[i][j], i + 1, j + 1);
+        for (int j = i; j < 6; ++j) {
+            // check if this move can be performed in this turn, flipped or not
+            bool valid = game->deque.length && game->count[i][j]
+                && (game->deque.rear->s == i + 1 || game->deque.rear->s == j + 1 
+                || game->deque.front->f == i + 1 || game->deque.front->f == j + 1);
+
+            if (valid)
+                printf("\x1b[32m"); // set foreground color to green
+            printf("%u [%d|%d]\x1b[0m   ", game->count[i][j], i + 1, j + 1);
+        }
         putchar('\n');
     }
 
@@ -188,7 +197,7 @@ int main() {
     srand((unsigned) time(NULL));
 
     game_t game;
-    game_init(&game);
+    game_init(&game, 16);
 
     while (game.running) {
         draw_screen(&game);
