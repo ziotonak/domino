@@ -7,7 +7,8 @@
 #include <time.h>
 #include "game.h"
 
-/*** Input ***/
+unsigned long cards = 16;
+enum {DEFAULT, AUTO} mode = DEFAULT;
 
 void handle_input(game_t *game) {
     card_t card;
@@ -25,8 +26,6 @@ void handle_input(game_t *game) {
     else
         game_push_rear(game, card);
 }
-
-/*** Output ***/
 
 void draw_screen(game_t *game) {
     printf("\x1b[2J\x1b[H"); // clear screen and move cursor
@@ -57,13 +56,7 @@ void draw_screen(game_t *game) {
     }
 }
 
-/*** Auto ***/
-
-/*** Main ***/
-
-int main(int argc, char *argv[]) {
-    unsigned long cards = 16;
-    enum {DEFAULT, AUTO} mode = DEFAULT;
+void parse_args(int argc, char *argv[]) {
     bool help = false;
 
     for (size_t opt = 1; opt < argc; ++opt) {
@@ -100,7 +93,10 @@ int main(int argc, char *argv[]) {
         printf("Usage: %s [-h | --help] [-a | --auto] [cards]\n", argv[0]);
         exit(0);
     }
+}
 
+int main(int argc, char *argv[]) {
+    parse_args(argc, argv);
     srand((unsigned) time(NULL));
 
     game_t game;
