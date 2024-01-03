@@ -3,7 +3,7 @@
 #include "game.h"
 
 void game_init(game_t *game, unsigned cards) {
-    game->running = true;
+    game->running = cards > 0;
     game->score = 0;
     game->round = 1;
     deque_init(&game->deque, cards + 5);
