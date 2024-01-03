@@ -1,4 +1,5 @@
 #include <ctype.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -18,7 +19,7 @@ typedef struct {
 
 void die(const char *message) {
     perror(message);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 void deque_init(deque_t *deque, size_t capacity) {
@@ -77,7 +78,7 @@ typedef struct {
     unsigned count[6][6];
 } game_t;
 
-void game_init(game_t *game, unsigned cards) {
+void game_init(game_t *game, unsigned long cards) {
     game->running = true;
     game->score = 0;
     game->round = 1;
@@ -191,19 +192,62 @@ void draw_screen(game_t *game) {
     }
 }
 
+/*** Auto ***/
+
 /*** Main ***/
 
-int main() {
+int main(int argc, char *argv[]) {
+    unsigned long cards = 16;
+    enum {DEFAULT, AUTO} mode = DEFAULT;
+    bool help = false;
+
+    for (size_t opt = 1; opt < argc; ++opt) {
+        if (argv[opt][0] == '-') {
+            switch (argv[opt][1]) {
+                case '-': {
+                    const char *arg = argv[opt] + 2;
+                    if (strcmp("help", arg) == 0)
+                        help = true;
+                    else if (strcmp("auto", arg) == 0)
+                        mode = AUTO;
+                    else
+                        help = true;
+                    break;
+                }
+                case 'a':
+                    mode = AUTO;
+                    break;
+                case 'h':
+                default:
+                    help = true;
+                    break;
+            }
+        } else {
+            unsigned long value = strtoul(argv[opt], NULL, 0);
+            if (value && errno != ERANGE)
+                cards = value;
+            else
+                help = true;
+        }
+    }
+
+    if (help) {
+        printf("Usage: %s [-h | --help] [-a | --auto] [cards]\n", argv[0]);
+        exit(0);
+    }
+
     srand((unsigned) time(NULL));
 
     game_t game;
-    game_init(&game, 16);
+    game_init(&game, cards);
 
-    while (game.running) {
+    if (mode == DEFAULT) {
+        while (game.running) {
+            draw_screen(&game);
+            handle_input(&game);
+        }
         draw_screen(&game);
-        handle_input(&game);
     }
-    draw_screen(&game);
 
     game_free(&game);
 }
