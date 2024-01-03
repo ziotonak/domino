@@ -95,6 +95,36 @@ void parse_args(int argc, char *argv[]) {
     }
 }
 
+unsigned _solve(unsigned count[6][6], unsigned rear) {
+    unsigned score = 0;
+    for (int i = 0; i < 6; ++i) {
+        if (count[rear][i]) {
+            count[i][rear] = --count[rear][i];
+            unsigned value = _solve(count, i);
+            value += rear + i + 2;
+            score = value > score ? value : score;
+            count[i][rear] = ++count[rear][i];
+        }
+    }
+    return score;
+}
+
+unsigned solve(unsigned count[6][6]) {
+    unsigned score = 0;
+    for (int i = 0; i < 6; ++i) {
+        for (int j = 0; j < 6; ++j) {
+            if (count[i][j]) {
+                count[i][j] = --count[j][i];
+                unsigned value = _solve(count, j);
+                value += i + j + 2;
+                score = value > score ? value : score;
+                count[i][j] = ++count[j][i];
+            }
+        }
+    }
+    return score;
+}
+
 int main(int argc, char *argv[]) {
     parse_args(argc, argv);
     srand((unsigned) time(NULL));
@@ -108,6 +138,10 @@ int main(int argc, char *argv[]) {
             handle_input(&game);
         }
         draw_screen(&game);
+    } else {
+        draw_screen(&game);
+        unsigned score = solve(game.count);
+        printf("Score: %u\n", score);
     }
 
     game_free(&game);
