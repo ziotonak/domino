@@ -9,5 +9,6 @@ var searchData=
   ['deque_5fpush_5frear_6',['deque_push_rear',['../deque_8h.html#ac67cd72779f369c5e983566bfc47dcdf',1,'deque.c']]],
   ['deque_5ft_7',['deque_t',['../structdeque__t.html',1,'']]],
   ['die_8',['die',['../utils_8h.html#a46a82a4f5106b731041e4f2893f3f21d',1,'utils.c']]],
-  ['domino_9',['domino',['../md_README.html',1,'']]]
+  ['domino_9',['domino',['../md_README.html',1,'']]],
+  ['draw_5fscreen_10',['draw_screen',['../main_8c.html#a2ea3662dca395abf7c7037e28976af8e',1,'main.c']]]
 ];

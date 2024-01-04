@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['rear_0',['rear',['../structdeque__t.html#a799ea03fb1591f8e30651cad54cf0f85',1,'deque_t']]],
-  ['round_1',['round',['../structgame__t.html#a05ee13a38cefaa68555cdc06d15a2f3c',1,'game_t']]],
-  ['running_2',['running',['../structgame__t.html#a36f7b6be7108281af77939ceaec42fd6',1,'game_t']]]
+  ['mode_0',['mode',['../main_8c.html#a5c1d2325b5f8f62d12f43f3051b79318',1,'main.c']]]
 ];
