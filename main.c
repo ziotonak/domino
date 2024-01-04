@@ -12,11 +12,11 @@ enum {DEFAULT, AUTO} mode = DEFAULT;
 
 void handle_input(game_t *game) {
     card_t card;
-    printf("Insert card: ");
+    printf("Insert card (two space separated numbers, order matters): ");
     scanf("%u", &card.first);
     scanf("%u", &card.second);
 
-    printf("Push L/r: ");
+    printf("Push left or right ('l' for left or 'r' for right): ");
     char c = tolower(getchar());
     while (c != 'l' && c != 'r')
         c = tolower(getchar());
