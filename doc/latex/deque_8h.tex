@@ -1,0 +1,121 @@
+\doxysection{deque.\+h File Reference}
+\hypertarget{deque_8h}{}\label{deque_8h}\index{deque.h@{deque.h}}
+
+
+File that contains the definitions of a double ended queue.  
+
+
+{\ttfamily \#include $<$stddef.\+h$>$}\newline
+{\ttfamily \#include "{}card.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structdeque__t}{deque\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em A double ended queue implemented using a circular array. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{deque_8h_aa8cb7abb094bfa4a586fe2eb58916f7d}{deque\+\_\+init}} (\mbox{\hyperlink{structdeque__t}{deque\+\_\+t}} \texorpdfstring{$\ast$}{*}deque, size\+\_\+t capacity)
+\begin{DoxyCompactList}\small\item\em Function used to initialize a double ended queue. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{deque_8h_a87e1951afe31d2c39f06ebe871ffd5b1}{deque\+\_\+free}} (\mbox{\hyperlink{structdeque__t}{deque\+\_\+t}} \texorpdfstring{$\ast$}{*}deque)
+\begin{DoxyCompactList}\small\item\em Function used to free a double ended queue. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcard__t}{card\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{deque_8h_a579bb64242dd7943728d00dc4434a596}{deque\+\_\+at}} (\mbox{\hyperlink{structdeque__t}{deque\+\_\+t}} \texorpdfstring{$\ast$}{*}deque, size\+\_\+t index)
+\begin{DoxyCompactList}\small\item\em Function that returns a pointer to the element at the index passed as a parameter. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{deque_8h_a89e6f920d7346707dacab97abd1b4524}{deque\+\_\+push\+\_\+front}} (\mbox{\hyperlink{structdeque__t}{deque\+\_\+t}} \texorpdfstring{$\ast$}{*}deque, \mbox{\hyperlink{structcard__t}{card\+\_\+t}} value)
+\begin{DoxyCompactList}\small\item\em Function that pushes an element to the front of the double ended queue. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{deque_8h_ac67cd72779f369c5e983566bfc47dcdf}{deque\+\_\+push\+\_\+rear}} (\mbox{\hyperlink{structdeque__t}{deque\+\_\+t}} \texorpdfstring{$\ast$}{*}deque, \mbox{\hyperlink{structcard__t}{card\+\_\+t}} value)
+\begin{DoxyCompactList}\small\item\em Function that pushes an element to the rear of the double ended queue. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+File that contains the definitions of a double ended queue. 
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{deque_8h_a579bb64242dd7943728d00dc4434a596}\label{deque_8h_a579bb64242dd7943728d00dc4434a596} 
+\index{deque.h@{deque.h}!deque\_at@{deque\_at}}
+\index{deque\_at@{deque\_at}!deque.h@{deque.h}}
+\doxysubsubsection{\texorpdfstring{deque\_at()}{deque\_at()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structcard__t}{card\+\_\+t}} \texorpdfstring{$\ast$}{*} deque\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdeque__t}{deque\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{deque,  }\item[{size\+\_\+t}]{index }\end{DoxyParamCaption})}
+
+
+
+Function that returns a pointer to the element at the index passed as a parameter. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deque} & the double ended queue that contains the element. \\
+\hline
+{\em index} & the position of the element in the double ended queue. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the element at index or a NULL pointer if the index is out of bounds. 
+\end{DoxyReturn}
+\Hypertarget{deque_8h_a87e1951afe31d2c39f06ebe871ffd5b1}\label{deque_8h_a87e1951afe31d2c39f06ebe871ffd5b1} 
+\index{deque.h@{deque.h}!deque\_free@{deque\_free}}
+\index{deque\_free@{deque\_free}!deque.h@{deque.h}}
+\doxysubsubsection{\texorpdfstring{deque\_free()}{deque\_free()}}
+{\footnotesize\ttfamily void deque\+\_\+free (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdeque__t}{deque\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{deque }\end{DoxyParamCaption})}
+
+
+
+Function used to free a double ended queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deque} & the double ended queue to free. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{deque_8h_aa8cb7abb094bfa4a586fe2eb58916f7d}\label{deque_8h_aa8cb7abb094bfa4a586fe2eb58916f7d} 
+\index{deque.h@{deque.h}!deque\_init@{deque\_init}}
+\index{deque\_init@{deque\_init}!deque.h@{deque.h}}
+\doxysubsubsection{\texorpdfstring{deque\_init()}{deque\_init()}}
+{\footnotesize\ttfamily void deque\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdeque__t}{deque\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{deque,  }\item[{size\+\_\+t}]{capacity }\end{DoxyParamCaption})}
+
+
+
+Function used to initialize a double ended queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deque} & the double ended queue to initialize. \\
+\hline
+{\em capacity} & the maximum capacity of the double ended queue. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{deque_8h_a89e6f920d7346707dacab97abd1b4524}\label{deque_8h_a89e6f920d7346707dacab97abd1b4524} 
+\index{deque.h@{deque.h}!deque\_push\_front@{deque\_push\_front}}
+\index{deque\_push\_front@{deque\_push\_front}!deque.h@{deque.h}}
+\doxysubsubsection{\texorpdfstring{deque\_push\_front()}{deque\_push\_front()}}
+{\footnotesize\ttfamily void deque\+\_\+push\+\_\+front (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdeque__t}{deque\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{deque,  }\item[{\mbox{\hyperlink{structcard__t}{card\+\_\+t}}}]{value }\end{DoxyParamCaption})}
+
+
+
+Function that pushes an element to the front of the double ended queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deque} & the double ended queue. \\
+\hline
+{\em value} & the value to push. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{deque_8h_ac67cd72779f369c5e983566bfc47dcdf}\label{deque_8h_ac67cd72779f369c5e983566bfc47dcdf} 
+\index{deque.h@{deque.h}!deque\_push\_rear@{deque\_push\_rear}}
+\index{deque\_push\_rear@{deque\_push\_rear}!deque.h@{deque.h}}
+\doxysubsubsection{\texorpdfstring{deque\_push\_rear()}{deque\_push\_rear()}}
+{\footnotesize\ttfamily void deque\+\_\+push\+\_\+rear (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdeque__t}{deque\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{deque,  }\item[{\mbox{\hyperlink{structcard__t}{card\+\_\+t}}}]{value }\end{DoxyParamCaption})}
+
+
+
+Function that pushes an element to the rear of the double ended queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deque} & the double ended queue. \\
+\hline
+{\em value} & the value to push. \\
+\hline
+\end{DoxyParams}

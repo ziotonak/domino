@@ -1,0 +1,31 @@
+\doxysection{deque.\+h}
+\hypertarget{deque_8h_source}{}\label{deque_8h_source}\mbox{\hyperlink{deque_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ DEQUE\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ DEQUE\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <stddef.h>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}card.h"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structdeque__t_ae809d5359ac030c60a30a8f0b2294b82}{length}};\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structdeque__t_ad721fc6ca6a3d6ba3bc506576622aab0}{capacity}};\ }
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{structcard__t}{card\_t}}\ *\mbox{\hyperlink{structdeque__t_a5261992ce7165518f201221de42be964}{array}};\ }
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{structcard__t}{card\_t}}\ *\mbox{\hyperlink{structdeque__t_aab4592cb1cf5b1d1d3bf9f30497a4fa3}{front}};\ }
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{structcard__t}{card\_t}}\ *\mbox{\hyperlink{structdeque__t_a799ea03fb1591f8e30651cad54cf0f85}{rear}};\ }
+\DoxyCodeLine{00020\ \}\ \mbox{\hyperlink{structdeque__t}{deque\_t}};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00028\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{deque_8h_aa8cb7abb094bfa4a586fe2eb58916f7d}{deque\_init}}(\mbox{\hyperlink{structdeque__t}{deque\_t}}\ *deque,\ \textcolor{keywordtype}{size\_t}\ capacity);}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00035\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{deque_8h_a87e1951afe31d2c39f06ebe871ffd5b1}{deque\_free}}(\mbox{\hyperlink{structdeque__t}{deque\_t}}\ *deque);}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00044\ \mbox{\hyperlink{structcard__t}{card\_t}}\ *\mbox{\hyperlink{deque_8h_a579bb64242dd7943728d00dc4434a596}{deque\_at}}(\mbox{\hyperlink{structdeque__t}{deque\_t}}\ *deque,\ \textcolor{keywordtype}{size\_t}\ index);}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00052\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{deque_8h_a89e6f920d7346707dacab97abd1b4524}{deque\_push\_front}}(\mbox{\hyperlink{structdeque__t}{deque\_t}}\ *deque,\ \mbox{\hyperlink{structcard__t}{card\_t}}\ value);}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00060\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{deque_8h_ac67cd72779f369c5e983566bfc47dcdf}{deque\_push\_rear}}(\mbox{\hyperlink{structdeque__t}{deque\_t}}\ *deque,\ \mbox{\hyperlink{structcard__t}{card\_t}}\ value);}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ DEQUE\_H}}
+
+\end{DoxyCode}
