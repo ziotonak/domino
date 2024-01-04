@@ -95,32 +95,63 @@ void parse_args(int argc, char *argv[]) {
     }
 }
 
-unsigned _solve(unsigned count[6][6], unsigned rear) {
+unsigned _solve(game_t *game, unsigned count[6][6], unsigned rear, bool print) {
+    card_t card;
     unsigned score = 0;
     for (int i = 0; i < 6; ++i) {
         if (count[rear][i]) {
             count[i][rear] = --count[rear][i];
-            unsigned value = _solve(count, i);
+            unsigned value = _solve(game, count, i, false);
             value += rear + i + 2;
-            score = value > score ? value : score;
+            if (value > score) {
+                score = value;
+                card.first = rear;
+                card.second = i;
+            }
             count[i][rear] = ++count[rear][i];
         }
+    }
+    if (print && score != 0) {
+        unsigned i = card.first, j = card.second;
+        count[i][j] = --count[j][i];
+        ++card.first;
+        ++card.second;
+        game_push_rear(game, card);
+        _solve(game, count, j, true);
+        count[i][j] = ++count[j][i];
     }
     return score;
 }
 
-unsigned solve(unsigned count[6][6]) {
+unsigned solve(game_t *game) {
+    card_t card;
     unsigned score = 0;
+    unsigned count[6][6];
+    for (int i = 0; i < 6; ++i)
+        for (int j = 0; j < 6; ++j)
+            count[i][j] = game->count[i][j];
     for (int i = 0; i < 6; ++i) {
         for (int j = 0; j < 6; ++j) {
             if (count[i][j]) {
                 count[i][j] = --count[j][i];
-                unsigned value = _solve(count, j);
+                unsigned value = _solve(game, count, j, false);
                 value += i + j + 2;
-                score = value > score ? value : score;
+                if (value > score) {
+                    score = value;
+                    card.first = i;
+                    card.second = j;
+                }
                 count[i][j] = ++count[j][i];
             }
         }
+    }
+    if (score != 0) {
+        unsigned j = card.second;
+        count[card.first][card.second] = --count[card.second][card.first];
+        ++card.first;
+        ++card.second;
+        game_push_rear(game, card);
+        _solve(game, count, j, true);
     }
     return score;
 }
@@ -139,9 +170,8 @@ int main(int argc, char *argv[]) {
         }
         draw_screen(&game);
     } else {
+        solve(&game);
         draw_screen(&game);
-        unsigned score = solve(game.count);
-        printf("Score: %u\n", score);
     }
 
     game_free(&game);
