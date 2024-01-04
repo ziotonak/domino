@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "include/utils.h"
+#include "utils.h"
 
 void die(const char *message) {
     perror(message);

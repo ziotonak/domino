@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-#include "include/game.h"
+#include "game.h"
 
 void game_init(game_t *game, unsigned cards) {
     game->running = cards > 0;

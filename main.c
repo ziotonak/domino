@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <time.h>
-#include "include/game.h"
+#include "game.h"
 
 unsigned long cards = 16;
 enum {DEFAULT, AUTO} mode = DEFAULT;

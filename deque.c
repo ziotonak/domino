@@ -1,6 +1,6 @@
 #include <stdlib.h>
-#include "include/deque.h"
-#include "include/utils.h"
+#include "deque.h"
+#include "utils.h"
 
 void deque_init(deque_t *deque, size_t capacity) {
     deque->length = 0;
