@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['rear_0',['rear',['../structdeque__t.html#a799ea03fb1591f8e30651cad54cf0f85',1,'deque_t']]]
+  ['length_0',['length',['../structdeque__t.html#ae809d5359ac030c60a30a8f0b2294b82',1,'deque_t']]]
 ];
