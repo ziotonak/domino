@@ -28,11 +28,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 .PHONY: clean
 clean:
-	@-$(RM) $(OBJ_DIR)
-	@-$(RM) $(BIN_DIR)
+	@-$(RM) $(OBJ_DIR) $(BIN_DIR)
 
 .PHONY: rebuild
-rebuild:
-	@-$(MAKE) clean
-	@-$(MAKE) all
+rebuild: clean all
 
