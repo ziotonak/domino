@@ -1,4 +1,5 @@
-.clangd
-
-bin/**
+# Exclude object files
 obj/**
+
+# Exclude binaries
+bin/**
