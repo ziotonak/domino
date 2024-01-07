@@ -2,11 +2,8 @@
  * @file
  * @brief File that contains the definitions of a double ended queue.
  */
-#ifndef DEQUE_H
-#define DEQUE_H
-
 #include <stddef.h>
-#include "card.h"
+#include <domino/card.h>
 
 /**
  * @brief A double ended queue implemented using a circular array.
@@ -58,5 +55,3 @@ void deque_push_front(deque_t *deque, card_t value);
  * @param value the value to push.
  */
 void deque_push_rear(deque_t *deque, card_t value);
-
-#endif // DEQUE_H

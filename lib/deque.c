@@ -1,6 +1,6 @@
 #include <stdlib.h>
-#include "deque.h"
-#include "utils.h"
+#include <domino/deque.h>
+#include <domino/utils.h>
 
 void deque_init(deque_t *deque, size_t capacity) {
     deque->length = 0;

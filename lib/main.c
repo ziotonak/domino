@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <time.h>
-#include "game.h"
+#include <domino/game.h>
 
 unsigned long cards = 16; /**< The number of cards the player will have at the start of the game. */
 enum {DEFAULT, AUTO} mode = DEFAULT; /**< Current mode of the game. If set to auto an ai is used to play the game. */
@@ -44,8 +44,8 @@ void draw_screen(game_t *game) {
     printf("Score: %u\n", game->score); 
     printf("Round: %u\n", game->round);
 
-    for (int i = 0; i < 6; ++i) {
-        for (int j = i; j < 6; ++j) {
+    for (unsigned int i = 0; i < 6; ++i) {
+        for (unsigned int j = i; j < 6; ++j) {
             // check if this move can be performed in this turn, flipped or not
             bool valid = game->deque.length && game->count[i][j]
                 && (game->deque.rear->second == i + 1 || game->deque.rear->second == j + 1 
@@ -79,7 +79,7 @@ void draw_screen(game_t *game) {
 void parse_args(int argc, char *argv[]) {
     bool help = false;
 
-    for (size_t opt = 1; opt < argc; ++opt) {
+    for (int opt = 1; opt < argc; ++opt) {
         if (argv[opt][0] == '-') {
             switch (argv[opt][1]) {
                 case '-': {

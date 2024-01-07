@@ -2,11 +2,10 @@
  * @file
  * @brief File containing the definitions of a game.
  */
-#ifndef GAME_H
-#define GAME_H
+#pragma once
 
 #include <stdbool.h>
-#include "deque.h"
+#include <domino/deque.h>
 
 /**
  * @brief A struct that contains the data needed to run a game of domino.
@@ -62,5 +61,3 @@ void game_push_front(game_t *game, card_t card);
  * @param card the type of card to push to the front.
  */
 void game_push_rear(game_t *game, card_t card);
-
-#endif // GAME_H
