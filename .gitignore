@@ -3,3 +3,6 @@ obj/**
 
 # Exclude binaries
 bin/**
+
+# Exclude documentation
+doc/**
