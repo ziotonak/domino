@@ -1,6 +1,6 @@
 NAME        := domino
 CC          := gcc
-CFLAGS      := -Wall -Wextra -pedantic -I include -g
+CFLAGS      := -Werror -Wall -Wextra -pedantic -I include -g
 
 
 SRC_DIR     := lib
