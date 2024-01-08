@@ -6,15 +6,16 @@
 #include <string.h>
 #include <time.h>
 #include <domino/game.h>
+#include <domino/complete_search.h>
 
 unsigned long cards = 16;
 enum {DEFAULT, AUTO} mode = DEFAULT;
 
 void handle_input(game_t *game) {
-    card_t card;
-    printf("Insert card (two space separated numbers, order matters): ");
-    scanf("%u", &card.first);
-    scanf("%u", &card.second);
+    tile_t tile;
+    printf("Insert tile (two space separated numbers, order matters): ");
+    scanf("%u", &tile.first);
+    scanf("%u", &tile.second);
 
     printf("Push left or right ('l' for left or 'r' for right): ");
     char c = tolower(getchar());
@@ -22,9 +23,9 @@ void handle_input(game_t *game) {
         c = tolower(getchar());
 
     if (c == 'l')
-        game_push_front(game, card);
+        game_push_front(game, tile);
     else
-        game_push_rear(game, card);
+        game_push_rear(game, tile);
 }
 
 void draw_screen(game_t *game) {
@@ -36,21 +37,21 @@ void draw_screen(game_t *game) {
     for (unsigned int i = 0; i < 6; ++i) {
         for (unsigned int j = i; j < 6; ++j) {
             // check if this move can be performed in this turn, flipped or not
-            bool valid = game->deque.length && game->count[i][j]
+            bool valid = game->deque.length && game->tile[i][j]
                 && (game->deque.rear->second == i + 1 || game->deque.rear->second == j + 1 
                 || game->deque.front->first == i + 1 || game->deque.front->first == j + 1);
 
             if (valid)
                 printf("\x1b[32m"); // set foreground color to green
-            printf("%u [%d|%d]\x1b[0m   ", game->count[i][j], i + 1, j + 1);
+            printf("%u [%d|%d]\x1b[0m   ", game->tile[i][j], i + 1, j + 1);
         }
         putchar('\n');
     }
 
     if (game->deque.length) {
         for (size_t i = 0; i < game->deque.length; ++i) {
-            card_t card = *deque_at(&game->deque, i);
-            printf("[%u|%u] ", card.first, card.second);
+            tile_t tile = *deque_at(&game->deque, i);
+            printf("[%u|%u] ", tile.first, tile.second);
         }
         putchar('\n');
     }
@@ -95,67 +96,6 @@ void parse_args(int argc, char *argv[]) {
     }
 }
 
-unsigned _solve(game_t *game, unsigned count[6][6], unsigned rear, bool print) {
-    card_t card;
-    unsigned score = 0;
-    for (int i = 0; i < 6; ++i) {
-        if (count[rear][i]) {
-            count[i][rear] = --count[rear][i];
-            unsigned value = _solve(game, count, i, false);
-            value += rear + i + 2;
-            if (value > score) {
-                score = value;
-                card.first = rear;
-                card.second = i;
-            }
-            count[i][rear] = ++count[rear][i];
-        }
-    }
-    if (print && score != 0) {
-        unsigned i = card.first, j = card.second;
-        count[i][j] = --count[j][i];
-        ++card.first;
-        ++card.second;
-        game_push_rear(game, card);
-        _solve(game, count, j, true);
-        count[i][j] = ++count[j][i];
-    }
-    return score;
-}
-
-unsigned solve(game_t *game) {
-    card_t card;
-    unsigned score = 0;
-    unsigned count[6][6];
-    for (int i = 0; i < 6; ++i)
-        for (int j = 0; j < 6; ++j)
-            count[i][j] = game->count[i][j];
-    for (int i = 0; i < 6; ++i) {
-        for (int j = 0; j < 6; ++j) {
-            if (count[i][j]) {
-                count[i][j] = --count[j][i];
-                unsigned value = _solve(game, count, j, false);
-                value += i + j + 2;
-                if (value > score) {
-                    score = value;
-                    card.first = i;
-                    card.second = j;
-                }
-                count[i][j] = ++count[j][i];
-            }
-        }
-    }
-    if (score != 0) {
-        unsigned j = card.second;
-        count[card.first][card.second] = --count[card.second][card.first];
-        ++card.first;
-        ++card.second;
-        game_push_rear(game, card);
-        _solve(game, count, j, true);
-    }
-    return score;
-}
-
 int main(int argc, char *argv[]) {
     parse_args(argc, argv);
     srand((unsigned) time(NULL));
@@ -164,13 +104,13 @@ int main(int argc, char *argv[]) {
     game_init(&game, cards);
 
     if (mode == DEFAULT) {
-        while (game.running) {
+        while (game.is_running) {
             draw_screen(&game);
             handle_input(&game);
         }
         draw_screen(&game);
     } else {
-        solve(&game);
+        complete_search(&game);
         draw_screen(&game);
     }
 
