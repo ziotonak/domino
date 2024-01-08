@@ -39,6 +39,7 @@ static void _deque_resize(deque_t *deque, size_t capacity) {
         if (old == deque->array + deque->capacity)
             old = deque->array;
     }
+    *new = *old;
 
     free(deque->array);
     deque->capacity = capacity;
