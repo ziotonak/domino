@@ -83,23 +83,27 @@ void deque_push_rear(deque_t *deque, tile_t tile) {
 
 void deque_pop_front(deque_t *deque) {
     if (deque->length) {
-        ++deque->front;
-        if (deque->front == deque->array + deque->capacity)
-            deque->front = deque->array;
+        if (deque->length > 1) {
+            ++deque->front;
+            if (deque->front == deque->array + deque->capacity)
+                deque->front = deque->array;
+        }
+        --deque->length;
+        if (deque->length * DEQUE_GROWTH_FACTOR <= deque->capacity)
+            _deque_shrink(deque);
     }
-    --deque->length;
-    if (deque->length * DEQUE_GROWTH_FACTOR <= deque->capacity)
-        _deque_shrink(deque);
 }
 
 void deque_pop_rear(deque_t *deque) {
     if (deque->length) {
-        if (deque->front == deque->array)
-            deque->front = deque->array + deque->capacity;
-        --deque->rear;
+        if (deque->length > 1) {
+            if (deque->rear == deque->array)
+                deque->rear = deque->array + deque->capacity;
+            --deque->rear;
+        }
+        --deque->length;
+        if (deque->length * DEQUE_GROWTH_FACTOR <= deque->capacity)
+            _deque_shrink(deque);
     }
-    --deque->length;
-    if (deque->length * DEQUE_GROWTH_FACTOR <= deque->capacity)
-        _deque_shrink(deque);
 }
 
