@@ -1,32 +1,11 @@
-#include <ctype.h>
-#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include <time.h>
+
 #include <domino/game.h>
 #include <domino/complete_search.h>
-
-unsigned long cards = 16;
-enum {DEFAULT, AUTO} mode = DEFAULT;
-
-void handle_input(game_t *game) {
-    tile_t tile;
-    printf("Insert tile (two space separated numbers, order matters): ");
-    scanf("%u", &tile.first);
-    scanf("%u", &tile.second);
-
-    printf("Push left or right ('l' for left or 'r' for right): ");
-    char c = tolower(getchar());
-    while (c != 'l' && c != 'r')
-        c = tolower(getchar());
-
-    if (c == 'l')
-        game_push_front(game, tile);
-    else
-        game_push_rear(game, tile);
-}
 
 void draw_screen(game_t *game) {
     printf("\x1b[2J\x1b[H"); // clear screen and move cursor
@@ -37,12 +16,13 @@ void draw_screen(game_t *game) {
     for (unsigned int i = 0; i < 6; ++i) {
         for (unsigned int j = i; j < 6; ++j) {
             // check if this move can be performed in this turn, flipped or not
-            bool valid = game->deque.length && game->tile[i][j]
-                && (game->deque.rear->second == i + 1 || game->deque.rear->second == j + 1 
-                || game->deque.front->first == i + 1 || game->deque.front->first == j + 1);
+            bool valid = game->tile[i][j];
+            if (game->deque.length)
+                valid &= (game->deque.rear->second == i + 1 || game->deque.rear->second == j + 1 
+                    || game->deque.front->first == i + 1 || game->deque.front->first == j + 1);
 
             if (valid)
-                printf("\x1b[32m"); // set foreground color to green
+                printf("\x1b[92m"); // set foreground color to green
             printf("%u [%d|%d]\x1b[0m   ", game->tile[i][j], i + 1, j + 1);
         }
         putchar('\n');
@@ -57,63 +37,94 @@ void draw_screen(game_t *game) {
     }
 }
 
-void parse_args(int argc, char *argv[]) {
-    bool help = false;
+void run_normal(game_t *game) {
+    draw_screen(game);
+    while (game->is_running) {
+        int c;
+        tile_t tile;
 
-    for (int opt = 1; opt < argc; ++opt) {
-        if (argv[opt][0] == '-') {
-            switch (argv[opt][1]) {
-                case '-': {
-                    const char *arg = argv[opt] + 2;
-                    if (strcmp("help", arg) == 0)
-                        help = true;
-                    else if (strcmp("auto", arg) == 0)
-                        mode = AUTO;
-                    else
-                        help = true;
-                    break;
-                }
-                case 'a':
-                    mode = AUTO;
-                    break;
-                case 'h':
-                default:
-                    help = true;
-                    break;
-            }
-        } else {
-            unsigned long value = strtoul(argv[opt], NULL, 0);
-            if (value && errno != ERANGE)
-                cards = value;
-            else
-                help = true;
-        }
-    }
+        bool erase = false;
+        do {
+            if (erase)
+                printf("\x1b[1A\x1b[2K\x1b[999D\x1b[91m");
+            erase = true;
 
-    if (help) {
-        printf("Usage: %s [-h | --help] [-a | --auto] [cards]\n", argv[0]);
-        exit(0);
+            printf("Left [1-6]:\x1b[0m ");
+
+            while ((c = getchar()) != EOF && c == '\n');
+
+            char a;
+            while ((a = getchar()) != EOF && a != '\n');
+        } while (c < '1' || c > '6');
+        tile.first = c - '0';
+
+        erase = false;
+        do {
+            if (erase)
+                printf("\x1b[1A\x1b[2K\x1b[999D\x1b[91m");
+            erase = true;
+
+            printf("Right [1-6]:\x1b[0m ");
+
+            while ((c = getchar()) != EOF && c == '\n');
+
+            char a;
+            while ((a = getchar()) != EOF && a != '\n');
+        } while (c < '1' || c > '6');
+        tile.second = c - '0';
+
+        erase = false;
+        do {
+            if (erase)
+                printf("\x1b[1A\x1b[2K\x1b[999D\x1b[91m");
+            erase = true;
+
+            printf("Push front/rear [f/r]:\x1b[0m ");
+
+            while ((c = getchar()) != EOF && c == '\n');
+
+            char a;
+            while ((a = getchar()) != EOF && a != '\n');
+        } while (c != 'f' && c != 'r');
+
+        if (c == 'f')
+            game_push_front(game, tile);
+        else
+            game_push_rear(game, tile);
+
+        draw_screen(game);
     }
 }
 
-int main(int argc, char *argv[]) {
-    parse_args(argc, argv);
+void run_auto(game_t *game) {
+    complete_search(game);
+    draw_screen(game);
+}
+
+int main() {
     srand((unsigned) time(NULL));
 
+    char c;
+    bool erase = false;
+    do {
+        if (erase)
+            printf("\x1b[1A\x1b[2K\x1b[999D\x1b[91m");
+        erase = true;
+
+        printf("Interactive/auto [i/a]:\x1b[0m ");
+
+        while ((c = getchar()) != EOF && c == '\n');
+
+        char a;
+        while ((a = getchar()) != EOF && a != '\n');
+    } while (c != 'i' && c != 'a');
+ 
     game_t game;
-    game_init(&game, cards);
-
-    if (mode == DEFAULT) {
-        while (game.is_running) {
-            draw_screen(&game);
-            handle_input(&game);
-        }
-        draw_screen(&game);
-    } else {
-        complete_search(&game);
-        draw_screen(&game);
-    }
-
+    game_init(&game, 16);
+    if (c == 'i')
+        run_normal(&game);
+    else
+        run_auto(&game);
     game_free(&game);
 }
 
