@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <domino/utils.h>
+#include <domino/error_handling.h>
 
 void die(const char *message) {
     perror(message);
