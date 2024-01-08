@@ -118,9 +118,21 @@ int main() {
         char a;
         while ((a = getchar()) != EOF && a != '\n');
     } while (c != 'i' && c != 'a');
+
+
+    unsigned tiles;
+    char buffer[100];
+    while(1) {
+        printf("Insert the number of tiles >= 0:\x1b[0m ");
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL)
+            break;
+        if(sscanf(buffer, "%u", &tiles) == 1)
+            break;
+        printf("\x1b[1A\x1b[2K\x1b[999D\x1b[91m");
+    }
  
     game_t game;
-    game_init(&game, 16);
+    game_init(&game, tiles);
     if (c == 'i')
         run_normal(&game);
     else
