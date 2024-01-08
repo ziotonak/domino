@@ -1,4 +1,3 @@
-/** @file */
 #include <ctype.h>
 #include <errno.h>
 #include <stdio.h>
@@ -8,14 +7,9 @@
 #include <time.h>
 #include <domino/game.h>
 
-unsigned long cards = 16; /**< The number of cards the player will have at the start of the game. */
-enum {DEFAULT, AUTO} mode = DEFAULT; /**< Current mode of the game. If set to auto an ai is used to play the game. */
+unsigned long cards = 16;
+enum {DEFAULT, AUTO} mode = DEFAULT;
 
-/**
- * @brief Function used to handle the input of the player when playing in interactive mode.
- *
- * @param game the game.
- */
 void handle_input(game_t *game) {
     card_t card;
     printf("Insert card (two space separated numbers, order matters): ");
@@ -33,11 +27,6 @@ void handle_input(game_t *game) {
         game_push_rear(game, card);
 }
 
-/**
- * @brief Function used to display the playing field.
- *
- * @param game the game.
- */
 void draw_screen(game_t *game) {
     printf("\x1b[2J\x1b[H"); // clear screen and move cursor
 
@@ -67,15 +56,6 @@ void draw_screen(game_t *game) {
     }
 }
 
-/**
- * @brief Function used to parse the arguments passed to the program.
- *
- * Sets the global config variables based on the arguments passed to the program.
- * Prints an help message and quits if detects illegal arguments.
- *
- * @param argc the argument count.
- * @param argv the values of the arguments.
- */
 void parse_args(int argc, char *argv[]) {
     bool help = false;
 
@@ -143,11 +123,6 @@ unsigned _solve(game_t *game, unsigned count[6][6], unsigned rear, bool print) {
     return score;
 }
 
-/**
- * @brief Solves the game using a complete search strategy.
- *
- * @param game the game to solve.
- */
 unsigned solve(game_t *game) {
     card_t card;
     unsigned score = 0;
