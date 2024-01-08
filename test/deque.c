@@ -11,7 +11,7 @@
         } \
     } while (0)
 
-void test_deque_initialization(void) {
+void test_deque_initialization() {
     puts("test_deque_push_rear");
 
     deque_t deque;
@@ -26,7 +26,7 @@ void test_deque_initialization(void) {
     deque_free(&deque);
 }
 
-void test_deque_push_front(void) {
+void test_deque_push_front() {
     puts("test_deque_push_front");
 
     deque_t deque;
@@ -48,7 +48,7 @@ void test_deque_push_front(void) {
     deque_free(&deque);
 }
 
-void test_deque_push_rear(void) {
+void test_deque_push_rear() {
     puts("test_deque_push_rear");
 
     deque_t deque;
@@ -70,7 +70,7 @@ void test_deque_push_rear(void) {
     deque_free(&deque);
 }
 
-void test_deque_pop_front(void) {
+void test_deque_pop_front() {
     puts("test_deque_pop_front");
 
     deque_t deque;
@@ -95,7 +95,7 @@ void test_deque_pop_front(void) {
     deque_free(&deque);
 }
 
-void test_deque_pop_rear(void) {
+void test_deque_pop_rear() {
     puts("test_deque_pop_rear");
 
     deque_t deque;
@@ -120,7 +120,7 @@ void test_deque_pop_rear(void) {
     deque_free(&deque);
 }
 
-void test_deque_dynamic_resize(void) {
+void test_deque_dynamic_resize() {
     puts("test_deque_dynamic_resize");
 
     deque_t deque;

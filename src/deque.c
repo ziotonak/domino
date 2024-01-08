@@ -15,7 +15,7 @@ void deque_free(deque_t *deque) {
     free(deque->array);
 }
 
-tile_t *deque_at(deque_t *deque, size_t index) {
+tile_t *deque_at(const deque_t *deque, size_t index) {
     if (index >= deque->length)
         return NULL;
     tile_t *ptr = deque->front + index;
