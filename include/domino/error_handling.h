@@ -9,7 +9,7 @@
  * @brief Prints an error message, including system-specific error description,
  *        and exits the program with a failure status.
  *
- * @param[in] message - The error message to be printed.
+ * @param[in] message The error message to be printed.
  */
 void die(const char *message);
 

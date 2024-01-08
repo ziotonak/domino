@@ -46,22 +46,22 @@ typedef struct {
  *
  * Allocates memory for the internal array and sets initial values for the deque.
  *
- * @param[in,out] deque - Pointer to the deque structure to be initialized.
+ * @param[in,out] deque Pointer to the deque structure to be initialized.
  */
 void deque_init(deque_t *deque);
 
 /**
  * @brief Frees the memory used by the deque.
  *
- * @param[in,out] deque - Pointer to the deque structure to be freed.
+ * @param[in,out] deque Pointer to the deque structure to be freed.
  */
 void deque_free(deque_t *deque);
 
 /**
  * @brief Retrieves the element at the specified index in the deque.
  *
- * @param[in] deque - Pointer to the deque structure.
- * @param[in] index - Index of the element to retrieve.
+ * @param[in] deque Pointer to the deque structure.
+ * @param[in] index Index of the element to retrieve.
  * @return Pointer to the element at the specified index, or NULL if the index is out of bounds.
  */
 tile_t *deque_at(const deque_t *deque, size_t index);
@@ -71,8 +71,8 @@ tile_t *deque_at(const deque_t *deque, size_t index);
  *
  * If the deque is full, it is resized to accommodate more elements.
  *
- * @param[in,out] deque - Pointer to the deque structure.
- * @param[in] tile - Element to be pushed to the front of the deque.
+ * @param[in,out] deque Pointer to the deque structure.
+ * @param[in] tile Element to be pushed to the front of the deque.
  */
 void deque_push_front(deque_t *deque, tile_t tile);
 
@@ -81,8 +81,8 @@ void deque_push_front(deque_t *deque, tile_t tile);
  *
  * If the deque is full, it is resized to accommodate more elements.
  *
- * @param[in,out] deque - Pointer to the deque structure.
- * @param[in] tile - Element to be pushed to the rear of the deque.
+ * @param[in,out] deque Pointer to the deque structure.
+ * @param[in] tile Element to be pushed to the rear of the deque.
  */
 void deque_push_rear(deque_t *deque, tile_t tile);
 
@@ -91,7 +91,7 @@ void deque_push_rear(deque_t *deque, tile_t tile);
  *
  * If the deque becomes too empty, it is resized to conserve memory.
  *
- * @param[in,out] deque - Pointer to the deque structure.
+ * @param[in,out] deque Pointer to the deque structure.
  */
 void deque_pop_front(deque_t *deque);
 
@@ -100,7 +100,7 @@ void deque_pop_front(deque_t *deque);
  *
  * If the deque becomes too empty, it is resized to conserve memory.
  *
- * @param[in,out] deque - Pointer to the deque structure.
+ * @param[in,out] deque Pointer to the deque structure.
  */
 void deque_pop_rear(deque_t *deque);
 

@@ -15,7 +15,7 @@
  * domino tiles on the game board. It uses recursion to explore all possible
  * combinations and returns the maximum score achievable.
  *
- * @param[in,out] game - The linear domino game structure.
+ * @param[in,out] game The linear domino game structure.
  */
 void complete_search(game_t *game);
 
