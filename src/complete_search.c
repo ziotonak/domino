@@ -1,63 +1,92 @@
+#include <string.h>
 #include <domino/complete_search.h>
 
-static unsigned _complete_search(game_t *game, unsigned count[6][6], unsigned rear, bool print) {
-    tile_t card;
-    unsigned score = 0;
+static unsigned _complete_search(
+    game_t *game,
+    unsigned tile[6][6], 
+    unsigned rear,
+    bool confirm
+) {
+    unsigned max_i, max_j;
+    unsigned max_score = 0;
+
     for (int i = 0; i < 6; ++i) {
-        if (count[rear][i]) {
-            count[i][rear] = --count[rear][i];
-            unsigned value = _complete_search(game, count, i, false);
-            value += rear + i + 2;
-            if (value > score) {
-                score = value;
-                card.first = rear;
-                card.second = i;
+        if (tile[rear][i]) {
+
+            // place the tile
+            tile[rear][i] = --tile[i][rear];
+
+            unsigned score = _complete_search(game, tile, i, false);
+            score += rear + 1;
+            score += i + 1;
+
+            // update the best score
+            if (score > max_score) {
+                max_score = score;
+                max_i = rear;
+                max_j = i;
             }
-            count[i][rear] = ++count[rear][i];
+
+            // remove the tile
+            tile[rear][i] = ++tile[i][rear];
         }
     }
-    if (print && score != 0) {
-        unsigned i = card.first, j = card.second;
-        count[i][j] = --count[j][i];
-        ++card.first;
-        ++card.second;
-        game_push_rear(game, card);
-        _complete_search(game, count, j, true);
-        count[i][j] = ++count[j][i];
+
+    // confirm the optimal placement
+    if (confirm && max_score != 0) {
+        tile[max_i][max_j] = --tile[max_j][max_i];
+
+        tile_t max_tile = {max_i + 1, max_j + 1};
+        game_push_rear(game, max_tile);
+
+        _complete_search(game, tile, max_j, true);
+
+        tile[max_i][max_j] = ++tile[max_j][max_i];
     }
-    return score;
+
+    return max_score;
 }
 
-unsigned complete_search(game_t *game) {
-    tile_t card;
-    unsigned score = 0;
-    unsigned count[6][6];
-    for (int i = 0; i < 6; ++i)
-        for (int j = 0; j < 6; ++j)
-            count[i][j] = game->tile[i][j];
+void complete_search(game_t *game) {
+    unsigned tile[6][6];
+    memcpy(tile, game->tile, sizeof(tile));
+
+    unsigned max_i, max_j;
+    unsigned max_score = 0;
+
     for (int i = 0; i < 6; ++i) {
         for (int j = 0; j < 6; ++j) {
-            if (count[i][j]) {
-                count[i][j] = --count[j][i];
-                unsigned value = _complete_search(game, count, j, false);
-                value += i + j + 2;
-                if (value > score) {
-                    score = value;
-                    card.first = i;
-                    card.second = j;
-                }
-                count[i][j] = ++count[j][i];
+            if (!tile[i][j])
+                continue;
+
+            // place the tile
+            tile[i][j] = --tile[j][i];
+
+            unsigned score = _complete_search(game, tile, j, false);
+            score += i + 1;
+            score += j + 1;
+
+            // update the best score
+            if (score > max_score) {
+                max_score = score;
+                max_i = i;
+                max_j = j;
             }
+
+            // remove the tile
+            tile[i][j] = ++tile[j][i];
+
         }
     }
-    if (score != 0) {
-        unsigned j = card.second;
-        count[card.first][card.second] = --count[card.second][card.first];
-        ++card.first;
-        ++card.second;
-        game_push_rear(game, card);
-        _complete_search(game, count, j, true);
+
+    // confirm the optimal placement
+    if (max_score != 0) {
+        tile[max_i][max_j] = --tile[max_j][max_i];
+
+        tile_t max_tile = {max_i + 1, max_j + 1};
+        game_push_rear(game, max_tile);
+
+        _complete_search(game, tile, max_j, true);
     }
-    return score;
 }
 
