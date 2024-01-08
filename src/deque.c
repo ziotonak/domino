@@ -8,7 +8,7 @@ void deque_init(deque_t *deque) {
     deque->array = calloc(deque->capacity, sizeof(tile_t));
     if (deque->array == NULL)
         die("calloc");
-    deque->front = deque ->rear = deque->array;
+    deque->front = deque->rear = deque->array;
 }
 
 void deque_free(deque_t *deque) {
@@ -24,13 +24,42 @@ tile_t *deque_at(deque_t *deque, size_t index) {
     return ptr;
 }
 
-void deque_push_front(deque_t *deque, tile_t tile) {
-    if (deque->length == deque->capacity) {
-        deque->capacity *= DEQUE_GROWTH_FACTOR;
-        deque->array = realloc(deque->array, deque->capacity * sizeof(tile_t));
-        if (deque->array == NULL)
-            die("realloc");
+static void _deque_resize(deque_t *deque, size_t capacity) {
+    if (capacity < deque->length)
+        return;
+
+    tile_t *array = calloc(capacity, sizeof(tile_t));
+    if (array == NULL)
+        die("calloc");
+
+    tile_t *new = array;
+    tile_t *old = deque->front;
+    while (old != deque->rear) {
+        *new++ = *old++;
+        if (old == deque->array + deque->capacity)
+            old = deque->array;
     }
+
+    free(deque->array);
+    deque->capacity = capacity;
+    deque->front = deque->rear = deque->array = array;
+    if (deque->length)
+        deque->rear += deque->length - 1;
+}
+
+static inline void _deque_grow(deque_t *deque) {
+    _deque_resize(deque, deque->capacity * DEQUE_GROWTH_FACTOR);
+}
+
+static void _deque_shrink(deque_t *deque) {
+    if (deque->capacity <= DEQUE_MINIMUM_CAPACITY)
+        return;
+    _deque_resize(deque, deque->capacity / DEQUE_GROWTH_FACTOR);
+}
+
+void deque_push_front(deque_t *deque, tile_t tile) {
+    if (deque->length == deque->capacity)
+        _deque_grow(deque);
     if (deque->length) {
         if (deque->front == deque->array)
             deque->front = deque->array + deque->capacity;
@@ -41,12 +70,8 @@ void deque_push_front(deque_t *deque, tile_t tile) {
 }
 
 void deque_push_rear(deque_t *deque, tile_t tile) {
-    if (deque->length == deque->capacity) {
-        deque->capacity *= DEQUE_GROWTH_FACTOR;
-        deque->array = realloc(deque->array, deque->capacity * sizeof(tile_t));
-        if (deque->array == NULL)
-            die("realloc");
-    }
+    if (deque->length == deque->capacity)
+        _deque_grow(deque);
     if (deque->length) {
         ++deque->rear;
         if (deque->rear == deque->array + deque->capacity)
@@ -54,5 +79,27 @@ void deque_push_rear(deque_t *deque, tile_t tile) {
     }
     ++deque->length;
     *deque->rear = tile;
+}
+
+void deque_pop_front(deque_t *deque) {
+    if (deque->length) {
+        ++deque->front;
+        if (deque->front == deque->array + deque->capacity)
+            deque->front = deque->array;
+    }
+    --deque->length;
+    if (deque->length * DEQUE_GROWTH_FACTOR <= deque->capacity)
+        _deque_shrink(deque);
+}
+
+void deque_pop_rear(deque_t *deque) {
+    if (deque->length) {
+        if (deque->front == deque->array)
+            deque->front = deque->array + deque->capacity;
+        --deque->rear;
+    }
+    --deque->length;
+    if (deque->length * DEQUE_GROWTH_FACTOR <= deque->capacity)
+        _deque_shrink(deque);
 }
 

@@ -19,4 +19,6 @@ void deque_free(deque_t *deque);
 tile_t *deque_at(deque_t *deque, size_t index);
 void deque_push_front(deque_t *deque, tile_t tile);
 void deque_push_rear(deque_t *deque, tile_t tile);
+void deque_pop_front(deque_t *deque);
+void deque_pop_rear(deque_t *deque);
 

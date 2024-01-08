@@ -1,6 +1,6 @@
 #include <domino/complete_search.h>
 
-unsigned _complete_search(game_t *game, unsigned count[6][6], unsigned rear, bool print) {
+static unsigned _complete_search(game_t *game, unsigned count[6][6], unsigned rear, bool print) {
     tile_t card;
     unsigned score = 0;
     for (int i = 0; i < 6; ++i) {
