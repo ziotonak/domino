@@ -2,6 +2,7 @@
  * @file error_handling.h
  * @brief Implementation of error handling functions.
  */
+
 #pragma once
 
 /**
